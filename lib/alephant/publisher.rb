@@ -17,7 +17,7 @@ module Alephant
   module Publisher
     include ::Alephant::Logger
 
-    def self.create(opts, logger)
+    def self.create(opts = {}, logger = nil)
       Publisher.new(opts, logger)
     end
 
@@ -26,7 +26,7 @@ module Alephant
     class Publisher
       attr_reader :sequencer, :queue, :writer, :parser
 
-      def initialize(opts = {}, logger = nil)
+      def initialize(opts, logger)
         ::Alephant::Logger.set_logger(logger) unless logger.nil?
 
         @parser = Support::Parser.new(
@@ -38,11 +38,11 @@ module Alephant
           opts[:sqs_queue_url],
           opts[:sequence_id_path]
         )
-        
+
         @queue = Queue.new(
           opts[:sqs_queue_url]
         )
-        
+
         @writer = Writer.new(
           opts.select do |k,v|
             [

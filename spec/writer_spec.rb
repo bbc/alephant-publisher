@@ -1,19 +1,27 @@
 require 'spec_helper'
 
-describe Alephant::Writer do
+describe Alephant::Publisher::Writer do
   before(:each) do
-    Alephant::RenderMapper.any_instance.stub(:initialize)
-    Alephant::Cache.any_instance.stub(:initialize)
+    Alephant::Publisher::RenderMapper
+      .any_instance
+      .stub(:initialize)
+
+      Alephant::Cache
+        .any_instance
+        .stub(:initialize)
   end
+
   subject do
-    Alephant::Writer.new({
-      :renderer_id => 'renderer_id',
+    Alephant::Publisher::Writer.new({
+      :renderer_id       => 'renderer_id',
       :lookup_table_name => 'lookup_table_name'
     })
   end
+
   describe "#write(data, version)" do
     before(:each) do
-      Alephant::RenderMapper.any_instance
+      Alephant::Publisher::RenderMapper
+        .any_instance
         .stub(:generate)
         .and_return({
           'component_id' => Struct.new(:render).new('content')
@@ -22,17 +30,20 @@ describe Alephant::Writer do
     end
 
     it "should write the correct lookup location" do
-      options = { :key => :value }
-      data = { :options => options }
+      options = { :key     => :value  }
+      data    = { :options => options }
 
       Alephant::Cache.any_instance
         .stub(:put)
+
       Alephant::Lookup
         .should_receive(:create)
         .with('lookup_table_name', 'component_id')
         .and_call_original
+
       Alephant::Lookup::Lookup.any_instance
         .stub(:initialize)
+
       Alephant::Lookup::Lookup.any_instance
         .should_receive(:write)
         .with(options, 'renderer_id/component_id/42de5e5c6f74b9fe4d956704a6d9e1c7/0')
@@ -41,10 +52,17 @@ describe Alephant::Writer do
     end
 
     it "should put the correct location, content to cache" do
-      Alephant::Lookup::Lookup.any_instance.stub(:initialize)
-      Alephant::Lookup::Lookup.any_instance.stub(:write)
+      Alephant::Lookup::Lookup
+        .any_instance
+        .stub(:initialize)
+
+      Alephant::Lookup::Lookup
+        .any_instance
+        .stub(:write)
+
       Alephant::Cache.any_instance
-        .should_receive(:put).with('renderer_id/component_id/35589a1cc0b3ca90fc52d0e711c0c434/0', 'content')
+        .should_receive(:put)
+        .with('renderer_id/component_id/35589a1cc0b3ca90fc52d0e711c0c434/0', 'content')
 
       subject.write({}, 0)
     end
