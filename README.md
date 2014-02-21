@@ -45,18 +45,23 @@ secret_access_key: SECRET_ACCESS_KEY
 
 ```rb
 require 'alephant'
+
+sequential_proc = Proc.new do |last_seen_id, data|
+  last_seen_id < data['sequence_id'].to_i
+end
+
+set_last_seen_proc = Proc.new do |data|
+  data['sequence_id'].to_i
+end
+
 opts = {
   :s3_bucket_id       => 'bucket-id',
   :s3_object_path     => 'path/to/object',
   :s3_object_id       => 'object_id',
   :table_name         => 'your_dynamo_db_table',
   :sqs_queue_id       => 'https://your_amazon_sqs_queue_url',
-  :sequential_proc    => Proc.new do |last_seen_id, data|
-    last_seen_id < data["sequence_id"].to_i
-  end,
-  :set_last_seen_proc => Proc.new do |data|
-    data["sequence_id"].to_i
-  end
+  :sequential_proc    => sequential_proc,
+  :set_last_seen_proc => set_last_seen_proc
 }
 
 logger = Logger.new
