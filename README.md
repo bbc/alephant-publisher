@@ -51,13 +51,14 @@ set_last_seen_proc = Proc.new do |data|
 end
 
 opts = {
-  :s3_bucket_id       => 'bucket-id',
-  :s3_object_path     => 'path/to/object',
-  :s3_object_id       => 'object_id',
-  :table_name         => 'your_dynamo_db_table',
-  :sqs_queue_id       => 'https://your_amazon_sqs_queue_url',
-  :sequential_proc    => sequential_proc,
-  :set_last_seen_proc => set_last_seen_proc
+  :s3_bucket_id         => 'bucket-id',
+  :s3_object_path       => 'path/to/object',
+  :s3_object_id         => 'object_id',
+  :sequencer_table_name => 'your_dynamo_db_table',
+  :sqs_queue_url        => 'https://your_amazon_sqs_queue_url',
+  :sequential_proc      => sequential_proc,
+  :set_last_seen_proc   => set_last_seen_proc,
+  :lookup_table_name    => 'your_lookup_table'
 }
 
 logger = Logger.new
