@@ -2,11 +2,7 @@
 
 Static publishing to S3 based on SQS messages
 
-[![Build Status](https://travis-ci.org/BBC-News/alephant-publisher.png?branch=master)](https://travis-ci.org/BBC-News/alephant-publisher)
-
-[![Dependency Status](https://gemnasium.com/BBC-News/alephant-publisher.png)](https://gemnasium.com/BBC-News/alephant-publisher)
-
-[![Gem Version](https://badge.fury.io/rb/alephant-publisher.png)](http://badge.fury.io/rb/alephant-publisher)
+[![Build Status](https://travis-ci.org/BBC-News/alephant-publisher.png?branch=master)](https://travis-ci.org/BBC-News/alephant-publisher) [![Dependency Status](https://gemnasium.com/BBC-News/alephant-publisher.png)](https://gemnasium.com/BBC-News/alephant-publisher) [![Gem Version](https://badge.fury.io/rb/alephant-publisher.png)](http://badge.fury.io/rb/alephant-publisher)
 
 ## Dependencies
 
