@@ -1,6 +1,6 @@
 require_relative 'env'
 
-require 'alephant/support'
+require 'alephant/support/parser'
 require 'alephant/sequencer'
 require 'alephant/cache'
 require 'alephant/logger'
