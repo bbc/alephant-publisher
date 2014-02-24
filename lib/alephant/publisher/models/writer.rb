@@ -6,18 +6,19 @@ module Alephant
       attr_reader :mapper, :cache
 
       def initialize(opts)
-        @renderer_id =
-          opts[:renderer_id]
+        @renderer_id = opts[:renderer_id]
+
         @cache = Cache.new(
           opts[:s3_bucket_id],
           opts[:s3_object_path]
         )
+
         @mapper = RenderMapper.new(
           opts[:renderer_id],
           opts[:view_path]
         )
-        @lookup_table_name =
-          opts[:lookup_table_name]
+
+        @lookup_table_name = opts[:lookup_table_name]
       end
 
       def write(data, version = nil)
@@ -27,6 +28,7 @@ module Alephant
       end
 
       private
+
       def store(id, content, options, version)
         location = location_for(
           id,
