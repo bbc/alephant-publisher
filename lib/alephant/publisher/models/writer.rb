@@ -22,8 +22,10 @@ module Alephant
       end
 
       def write(data, version = nil)
-        mapper.generate(data).each do |id, r|
+        mapper.generate(data).map do |id, r|
           store(id, r.render, data[:options], version)
+        end.each do | lookup_proc |
+          lookup_proc.call
         end
       end
 
@@ -37,7 +39,7 @@ module Alephant
         )
 
         cache.put(location, content)
-        lookup(id).write(options, location)
+        Proc.new { lookup(id).write(options, location) }
       end
 
       def lookup(component_id)
