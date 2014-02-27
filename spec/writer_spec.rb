@@ -57,7 +57,7 @@ describe Alephant::Publisher::Writer do
         )
 
       Alephant::Lookup::LookupHelper.any_instance
-        .should_receive(:process!)
+        .should_receive(:batch_process)
 
       subject.write(data, 0)
     end
@@ -73,7 +73,7 @@ describe Alephant::Publisher::Writer do
 
       Alephant::Lookup::LookupHelper
         .any_instance
-        .stub(:process!)
+        .stub(:batch_process)
 
       Alephant::Lookup::LookupTable
         .any_instance

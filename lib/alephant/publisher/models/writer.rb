@@ -28,7 +28,7 @@ module Alephant
           store(id, r.render, data[:options], version, lookup)
         end
 
-        lookup.process!
+        lookup.batch_process
       end
 
       private
