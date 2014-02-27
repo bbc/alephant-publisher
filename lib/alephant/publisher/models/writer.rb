@@ -22,16 +22,18 @@ module Alephant
       end
 
       def write(data, version = nil)
-        mapper.generate(data).map do |id, r|
-          store(id, r.render, data[:options], version)
-        end.each do | lookup_proc |
-          lookup_proc.call
+        lookup = Lookup.create(@lookup_table_name)
+
+        mapper.generate(data).each do |id, r|
+          store(id, r.render, data[:options], version, lookup)
         end
+
+        lookup.process!
       end
 
       private
 
-      def store(id, content, options, version)
+      def store(id, content, options, version, lookup)
         location = location_for(
           id,
           Crimp.signature(options),
@@ -39,11 +41,7 @@ module Alephant
         )
 
         cache.put(location, content)
-        Proc.new { lookup(id).write(options, location) }
-      end
-
-      def lookup(component_id)
-        Lookup.create(@lookup_table_name, component_id)
+        lookup.batch_write(id, options, location)
       end
 
       def location_for(component_id, options_hash, version = nil)

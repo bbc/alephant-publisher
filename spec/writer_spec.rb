@@ -38,27 +38,46 @@ describe Alephant::Publisher::Writer do
 
       Alephant::Lookup
         .should_receive(:create)
-        .with('lookup_table_name', 'component_id')
+        .with('lookup_table_name')
         .and_call_original
 
-      Alephant::Lookup::Lookup.any_instance
+      Alephant::Lookup::LookupHelper.any_instance
         .stub(:initialize)
 
-      Alephant::Lookup::Lookup.any_instance
-        .should_receive(:write)
-        .with(options, 'renderer_id/component_id/42de5e5c6f74b9fe4d956704a6d9e1c7/0')
+      Alephant::Lookup::LookupTable
+        .any_instance
+        .stub(:table_name)
+
+      Alephant::Lookup::LookupHelper.any_instance
+        .should_receive(:batch_write)
+        .with(
+          'component_id',
+          options,
+          'renderer_id/component_id/42de5e5c6f74b9fe4d956704a6d9e1c7/0'
+        )
+
+      Alephant::Lookup::LookupHelper.any_instance
+        .should_receive(:process!)
 
       subject.write(data, 0)
     end
 
     it "should put the correct location, content to cache" do
-      Alephant::Lookup::Lookup
+      Alephant::Lookup::LookupHelper
         .any_instance
         .stub(:initialize)
 
-      Alephant::Lookup::Lookup
+      Alephant::Lookup::LookupHelper
         .any_instance
-        .stub(:write)
+        .stub(:batch_write)
+
+      Alephant::Lookup::LookupHelper
+        .any_instance
+        .stub(:process!)
+
+      Alephant::Lookup::LookupTable
+        .any_instance
+        .stub(:table_name)
 
       Alephant::Cache.any_instance
         .should_receive(:put)
