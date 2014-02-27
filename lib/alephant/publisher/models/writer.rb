@@ -41,7 +41,7 @@ module Alephant
         )
 
         cache.put(location, content)
-        lookup.batch_write(id, options, location)
+        lookup.batch_write(options, location, id)
       end
 
       def location_for(component_id, options_hash, version = nil)

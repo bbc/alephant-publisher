@@ -51,9 +51,9 @@ describe Alephant::Publisher::Writer do
       Alephant::Lookup::LookupHelper.any_instance
         .should_receive(:batch_write)
         .with(
-          'component_id',
           options,
-          'renderer_id/component_id/42de5e5c6f74b9fe4d956704a6d9e1c7/0'
+          'renderer_id/component_id/42de5e5c6f74b9fe4d956704a6d9e1c7/0',
+          'component_id'
         )
 
       Alephant::Lookup::LookupHelper.any_instance
