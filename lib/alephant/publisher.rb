@@ -1,14 +1,8 @@
 require_relative 'env'
 
-require 'alephant/support/parser'
-require 'alephant/cache'
 require 'alephant/logger'
-require 'alephant/views'
-require 'alephant/renderer'
-require 'alephant/lookup'
 
 require "alephant/publisher/version"
-require 'alephant/publisher/models/render_mapper'
 require 'alephant/publisher/models/writer'
 require 'alephant/publisher/models/queue'
 
@@ -28,12 +22,6 @@ module Alephant
       def initialize(opts, logger)
         ::Alephant::Logger.set_logger(logger) unless logger.nil?
 
-        @sequencer = Sequencer.create(
-          opts[:sequencer_table_name],
-          opts[:sqs_queue_url],
-          opts[:sequence_id_path]
-        )
-
         @queue = Queue.new(
           opts[:sqs_queue_url]
         )
@@ -41,6 +29,9 @@ module Alephant
         @writer = Writer.new(
           opts.select do |k,v|
             [
+              :msg_vary_id_path,
+              :sequencer_table_name,
+              :sequence_id_path,
               :renderer_id,
               :s3_bucket_id,
               :s3_object_path,
@@ -53,12 +44,8 @@ module Alephant
 
       def run!
         Thread.new do
-          @queue.poll { |msg| receive(msg) }
+          @queue.poll { |msg| writer.write(msg) }
         end
-      end
-
-      def receive(msg)
-        writer.write(msg)
       end
 
     end
