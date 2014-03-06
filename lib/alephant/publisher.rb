@@ -1,7 +1,6 @@
 require_relative 'env'
 
 require 'alephant/support/parser'
-require 'alephant/sequencer'
 require 'alephant/cache'
 require 'alephant/logger'
 require 'alephant/views'
@@ -24,14 +23,10 @@ module Alephant
     private
 
     class Publisher
-      attr_reader :sequencer, :queue, :writer, :parser
+      attr_reader :sequencer, :queue, :writer
 
       def initialize(opts, logger)
         ::Alephant::Logger.set_logger(logger) unless logger.nil?
-
-        @parser = Support::Parser.new(
-          opts[:msg_vary_id_path]
-        )
 
         @sequencer = Sequencer.create(
           opts[:sequencer_table_name],
@@ -63,14 +58,7 @@ module Alephant
       end
 
       def receive(msg)
-        write msg if sequencer.sequential?(msg)
-      end
-
-      private
-
-      def write(msg)
-        writer.write(parser.parse(msg), sequencer.sequence_id_from(msg))
-        sequencer.set_last_seen(msg)
+        writer.write(msg)
       end
 
     end
