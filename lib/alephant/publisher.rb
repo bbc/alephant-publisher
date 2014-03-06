@@ -1,5 +1,14 @@
 require_relative 'env'
 
+require 'java'
+
+# setup executor
+java_import 'java.util.concurrent.ThreadPoolExecutor'
+java_import 'java.util.concurrent.TimeUnit'
+java_import 'java.util.concurrent.LinkedBlockingQueue'
+java_import 'java.util.concurrent.FutureTask'
+java_import 'java.util.concurrent.Callable'
+
 require 'alephant/logger'
 
 require "alephant/publisher/version"
@@ -17,15 +26,47 @@ module Alephant
     private
 
     class Publisher
-      attr_reader :sequencer, :queue, :writer
+      attr_reader :queue
 
       def initialize(opts, logger)
         ::Alephant::Logger.set_logger(logger) unless logger.nil?
 
+        @opts = opts
         @queue = Queue.new(
           opts[:sqs_queue_url]
         )
+      end
 
+      def run!
+        core_pool_size = 5
+        maximum_pool_size = 5
+        keep_alive_time = 300
+
+        executor = ThreadPoolExecutor.new(
+          core_pool_size,
+          maximum_pool_size,
+          keep_alive_time,
+          TimeUnit::SECONDS,
+          LinkedBlockingQueue.new
+        )
+
+        @queue.poll do |msg|
+          task = FutureTask.new(PublishTask.new(@opts, msg))
+          executor.execute(task)
+        end
+
+        executor.shutdown()
+      end
+
+    end
+
+    class PublishTask
+      include Callable
+
+      attr_reader :writer, :msg
+
+      def initialize(opts,msg)
+        @msg = msg
         @writer = Writer.new(
           opts.select do |k,v|
             [
@@ -42,10 +83,8 @@ module Alephant
         )
       end
 
-      def run!
-        Thread.new do
-          @queue.poll { |msg| writer.write(msg) }
-        end
+      def call
+        writer.write(msg)
       end
 
     end
