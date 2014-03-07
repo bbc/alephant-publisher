@@ -38,9 +38,9 @@ module Alephant
       end
 
       def run!
-        core_pool_size    = opts[:renderer_pool_min_size] || 2
-        maximum_pool_size = opts[:renderer_pool_max_size] || 4
-        keep_alive_time   = opts[:render_keep_alive_time] || 300
+        core_pool_size    = @opts[:renderer_pool_min_size] || 2
+        maximum_pool_size = @opts[:renderer_pool_max_size] || 4
+        keep_alive_time   = @opts[:render_keep_alive_time] || 300
 
         executor = ThreadPoolExecutor.new(
           core_pool_size,
