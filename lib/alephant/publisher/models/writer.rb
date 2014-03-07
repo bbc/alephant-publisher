@@ -24,6 +24,8 @@ module Alephant
 
         @lookup_table_name = opts[:lookup_table_name]
 
+        @renderer_id = opts[:renderer_id]
+
         @write_opts = {
           :sequencer_opts => {
             :table_name => opts[:sequencer_table_name],
