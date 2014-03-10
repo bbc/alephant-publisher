@@ -16,7 +16,7 @@ module Alephant
         @renderer_id        = opts[:renderer_id]
         @sequencer_opts     = opts[:sequencer_opts]
         @batch_sequencer    = sequencer_for(@renderer_id, @options)
-        @version            = @batch_sequencer.sequence_id_from(@msg)
+        @version            = @batch_sequencer.sequence_id_from(msg)
       end
 
       def sequencer_for(id, options)

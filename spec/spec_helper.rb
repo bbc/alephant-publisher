@@ -1,4 +1,6 @@
 require 'pry'
+
+require 'aws-sdk'
 require 'alephant/publisher'
 require 'alephant/publisher/models/writer'
 require 'alephant/publisher/models/queue'
