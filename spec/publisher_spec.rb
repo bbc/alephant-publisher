@@ -13,15 +13,6 @@ describe Alephant::Publisher do
     end
   end
 
-  describe "#run!" do
-    it "calls @queue.poll" do
-      expect_any_instance_of(Alephant::Publisher::Queue)
-      .to receive(:poll)
-      .and_yield(:msg)
-
-      t = instance.run!
-    end
-  end
 end
 
 describe Alephant::Publisher::PublishTask do
