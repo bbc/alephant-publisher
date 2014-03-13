@@ -12,7 +12,6 @@ describe Alephant::Publisher do
       expect(instance.queue).to     be_a Alephant::Publisher::Queue
     end
   end
-
 end
 
 describe Alephant::Publisher::PublishTask do
