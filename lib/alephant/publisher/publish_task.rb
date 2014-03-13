@@ -17,8 +17,10 @@ module Alephant
       end
 
       def call
-        Writer.new(opts).write(message)
-        message.delete
+        unless message.nil?
+          Writer.new(opts).write(message)
+          message.delete
+        end
       end
 
     end
