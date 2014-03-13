@@ -4,11 +4,17 @@ require 'alephant/logger'
 module Alephant
   module Publisher
     class Queue
+      WAIT_TIME = 5
+      VISABILITY_TIMEOUT = 300
+
       include ::Alephant::Logger
 
+      attr_reader :timeout, :wait_time
       attr_accessor :q
 
-      def initialize(id)
+      def initialize(id, timeout = VISABILITY_TIMEOUT, wait_time = WAIT_TIME)
+        @timeout = timeout
+        @wait_time = wait_time
         @sqs = AWS::SQS.new
         @q = @sqs.queues[id]
 
@@ -25,9 +31,11 @@ module Alephant
         sleep 1 until @q.exists?
       end
 
-      def poll(*args, &block)
-        logger.info("Queue.poll: polling with arguments #{args}")
-        @q.poll(*args, &block)
+      def message
+        @q.receive_message({
+          :visibility_timeout => @timeout,
+          :wait_time_seconds => @wait_time
+        })
       end
     end
   end

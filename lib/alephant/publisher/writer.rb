@@ -3,8 +3,8 @@ require 'alephant/views'
 require 'alephant/renderer'
 require 'alephant/lookup'
 
-require 'alephant/publisher/models/write_operation'
-require 'alephant/publisher/models/render_mapper'
+require 'alephant/publisher/write_operation'
+require 'alephant/publisher/render_mapper'
 
 module Alephant
   module Publisher
