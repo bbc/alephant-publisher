@@ -24,7 +24,7 @@ module Alephant
 
       VISIBILITY_TIMEOUT = 300
       KEEP_ALIVE_TIMEOUT = 300
-      RECEIVE_WAIT_TIME  = 30
+      RECEIVE_WAIT_TIME  = 15
       POOL_MIN_SIZE      = 2
       POOL_MAX_SIZE      = 4
 
