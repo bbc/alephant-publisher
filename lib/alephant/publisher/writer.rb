@@ -1,75 +1,98 @@
+require 'peach'
+require 'crimp'
+
 require 'alephant/cache'
 require 'alephant/views'
 require 'alephant/renderer'
 require 'alephant/lookup'
+require 'alephant/sequencer'
+
+require 'alephant/support/parser'
 
 require 'alephant/publisher/write_operation'
+require 'alephant/publisher/render_mapper'
 require 'alephant/publisher/render_mapper'
 
 module Alephant
   module Publisher
     class Writer
-      attr_reader :mapper, :cache
+      attr_reader
+        :id, :seq_id, :options, :data,
+        :opt_hash :config, :mapper, :renders,
+        :parser, :cache, :batch, :msg
 
-      def initialize(opts)
+      def initialize(config, msg)
+        @config = config
+
         @cache = Cache.new(
-          opts[:s3_bucket_id],
-          opts[:s3_object_path]
+          config[:s3_bucket_id],
+          config[:s3_object_path]
+        )
+
+        @parser = Support::Parser.new(
+          config[:msg_vary_path]
         )
 
         @mapper = RenderMapper.new(
-          opts[:renderer_id],
-          opts[:view_path]
+          config[:renderer_id],
+          config[:view_path]
         )
 
-        @lookup_table_name = opts[:lookup_table_name]
+        @id       = config[:renderer_id]
+        @msg      = msg
+        @data     = parser.parse(msg)
+        @options  = @data[:options]
+        @opt_hash = Crimp.signature(@options)
+        @renders  = mapper.generate(@data)
+        @batch    = (@renders.count > 1) ? seq_for(id, @options) : nil
+        @seq_id   = Sequencer::Sequencer.sequence_id_from(msg)
 
-        @renderer_id = opts[:renderer_id]
-
-        @write_opts = {
-          :sequencer_opts => {
-            :table_name => opts[:sequencer_table_name],
-            :id_path    => opts[:sequence_id_path]
-          },
-          :msg_vary_path => opts[:msg_vary_id_path],
-          :renderer_id => opts[:renderer_id]
-        }
+        @lookup_table_name = config[:lookup_table_name]
       end
 
-      def write(msg)
-        write_op = WriteOperation.new(msg, @write_opts)
-
-        write_op.batch_sequencer.sequence(msg) do |msg|
-          mapper.generate(write_op.data).each do |component_id, renderer|
-            write_component(write_op, component_id, renderer)
-          end
-        end
+      def run!
+        batch? ? batch.sequence(msg, &perform) : perform.call
       end
 
       private
 
-      def write_component(write_op, component_id, renderer)
-        location = location_for(component_id, write_op.options, write_op.version)
-        component_sequencer = write_op.sequencer_for(component_id, write_op.options)
+      def batch?
+        !batch.nil?
+      end
 
-        component_sequencer.sequence(write_op.msg) do |msg|
-          store(component_id, renderer.render, write_op.options, location)
+      def seq_for(id, options)
+        Sequencer.create(
+          config[:table_name],
+          seq_key_from(id, options),
+          config[:id_path]
+        )
+      end
+
+      def seq_key_from(ident,options)
+        "#{ident}/#{Crimp.signature(options)}"
+      end
+
+      def perform
+        Proc.new { renders.peach { |component_id, r| write(component_id, r) } }
+      end
+
+      def write(component_id, renderer)
+        seq_for(component_id, options).sequence(msg) do |msg|
+          store(component_id, renderer.render, location_for(component_id))
         end
       end
 
-      def store(component_id, content, options, location)
+      def store(component_id, content, location)
         cache.put(location, content)
-        lookup_for(component_id).write(options, location)
+        lookup.write(component_id, options, seq_id, location)
       end
 
-      def lookup_for(id)
-        Lookup.create(@lookup_table_name, id)
+      def lookup
+        Lookup.create(@lookup_table_name)
       end
 
-      def location_for(component_id, options, version = nil)
-        options_hash = Crimp.signature(options)
-        base_name = "#{@renderer_id}/#{component_id}/#{options_hash}"
-        version ? "#{base_name}/#{version}" : base_name
+      def location_for(component_id)
+        "#{id}/#{component_id}/#{@opt_hash}/#{seq_id}"
       end
 
     end
