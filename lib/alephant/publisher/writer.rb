@@ -51,7 +51,7 @@ module Alephant
             store(id, r.render, location_for(id))
           end
         rescue Exception => e
-          logger.warn "Alephant::Publisher::Writer#write: #{e.message}"
+          logger.warn "Alephant::Publisher::Writer#write: #{e.message}\n#{e.backtrace.join('\n')}"
 
           raise e
         end
@@ -75,7 +75,7 @@ module Alephant
       end
 
       def seq_for(id)
-        Sequencer.create(config[:sequencer_table_name], seq_key_from(id), config[:id_path])
+        Sequencer.create(config[:sequencer_table_name], seq_key_from(id), config[:sequence_id_path])
       end
 
       def seq_key_from(id)
