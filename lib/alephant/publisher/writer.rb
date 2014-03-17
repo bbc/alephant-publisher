@@ -5,16 +5,15 @@ require 'alephant/cache'
 require 'alephant/views'
 require 'alephant/renderer'
 require 'alephant/lookup'
+require 'alephant/logger'
 require 'alephant/sequencer'
-
 require 'alephant/support/parser'
-
-require 'alephant/publisher/render_mapper'
 require 'alephant/publisher/render_mapper'
 
 module Alephant
   module Publisher
     class Writer
+      include ::Alephant::Logger
       attr_reader :config, :message, :cache, :parser, :mapper
 
       def initialize(config, message)
@@ -47,8 +46,14 @@ module Alephant
       end
 
       def write(id, r)
-        seq_for(id).sequence(message) do
-          store(id, r.render, location_for(id))
+        begin
+          seq_for(id).sequence(message) do
+            store(id, r.render, location_for(id))
+          end
+        rescue Exception => e
+          logger.warn "Alephant::Publisher::Writer#write: #{e.message}"
+
+          raise e
         end
       end
 
