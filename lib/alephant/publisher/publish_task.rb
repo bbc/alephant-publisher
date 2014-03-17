@@ -18,7 +18,7 @@ module Alephant
 
       def call
         unless message.nil?
-          Writer.new(opts).write(message)
+          Writer.new(opts, message).run!
           message.delete
         end
       end
