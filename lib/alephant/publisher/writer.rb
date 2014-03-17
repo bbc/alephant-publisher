@@ -70,7 +70,7 @@ module Alephant
       end
 
       def seq_for(id)
-        Sequencer.create(config[:table_name], seq_key_from(id), config[:id_path])
+        Sequencer.create(config[:sequencer_table_name], seq_key_from(id), config[:id_path])
       end
 
       def seq_key_from(id)
@@ -78,7 +78,7 @@ module Alephant
       end
 
       def seq_id
-        @seq_id ||= Sequencer::Sequencer.sequence_id_from(message)
+        @seq_id ||= Sequencer::Sequencer.sequence_id_from(message, config[:msg_vary_id_path])
       end
 
       def renders
