@@ -22,11 +22,12 @@ module Alephant
 
     class Publisher
 
-      VISIBILITY_TIMEOUT = 300
-      KEEP_ALIVE_TIMEOUT = 300
+      VISIBILITY_TIMEOUT = 60
+      KEEP_ALIVE_TIMEOUT = 60
       RECEIVE_WAIT_TIME  = 15
       POOL_MIN_SIZE      = 2
       POOL_MAX_SIZE      = 4
+      QUEUE_THROTTLE     = 0.5
 
       attr_reader :queue, :executor
 
@@ -72,6 +73,8 @@ module Alephant
               )
             )
           )
+
+          sleep QUEUE_THROTTLE while executor.getActiveCount == executor.getMaximumPoolSize
         end
 
         executor.shutdown()

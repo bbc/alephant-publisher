@@ -50,9 +50,9 @@ describe Alephant::Publisher::Writer do
       .any_instance
       .stub(:get_last_seen)
 
-    Alephant::Lookup::LookupHelper
+    Alephant::Lookup::LookupTable
       .any_instance
-      .stub(:create_lookup_table)
+      .stub(:create)
 
     Alephant::Lookup::LookupTable
       .any_instance
@@ -67,11 +67,7 @@ describe Alephant::Publisher::Writer do
 
   end
 
-  subject do
-    Alephant::Publisher::Writer.new(opts)
-  end
-
-  describe "#write(data, version)" do
+  describe "#run!" do
     let(:msg) do
       data = {
         "sequence" => "1",
@@ -84,6 +80,10 @@ describe Alephant::Publisher::Writer do
       'renderer_id/component_id/218c835cec343537589dbf1619532e4d/1'
     end
 
+    subject do
+      Alephant::Publisher::Writer.new(opts, msg)
+    end
+
     it "should write the correct lookup location" do
       Alephant::Cache.any_instance.stub(:put)
 
@@ -91,7 +91,9 @@ describe Alephant::Publisher::Writer do
         .any_instance
         .should_receive(:write)
         .with(
+          "component_id",
           {:variant=>"foo"},
+          1,
           expected_location
         )
     end
@@ -106,7 +108,7 @@ describe Alephant::Publisher::Writer do
     end
 
     after do
-      subject.write(msg)
+      subject.run!
     end
   end
 end

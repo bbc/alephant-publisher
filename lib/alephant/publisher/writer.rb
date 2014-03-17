@@ -26,7 +26,7 @@ module Alephant
         )
 
         @parser = Support::Parser.new(
-          config[:message_vary_path]
+          config[:msg_vary_id_path]
         )
 
         @mapper = RenderMapper.new(
@@ -83,7 +83,7 @@ module Alephant
       end
 
       def seq_id
-        @seq_id ||= Sequencer::Sequencer.sequence_id_from(message, config[:msg_vary_id_path])
+        @seq_id ||= Sequencer::Sequencer.sequence_id_from(message, config[:sequence_id_path])
       end
 
       def renders
