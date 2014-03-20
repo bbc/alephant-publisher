@@ -55,9 +55,9 @@ module Alephant
         end
 
         @executor = ThreadPoolExecutor.new(
-          @opts[:renderer_pool_min_size].to_i || POOL_MIN_SIZE,
-          @opts[:renderer_pool_max_size].to_i || POOL_MAX_SIZE,
-          @opts[:render_keep_alive_time].to_i || KEEP_ALIVE_TIMEOUT,
+          @opts.fetch(:renderer_pool_min_size, POOL_MIN_SIZE).to_i,
+          @opts.fetch(:renderer_pool_max_size, POOL_MAX_SIZE).to_i,
+          @opts.fetch(:render_keep_alive_time, KEEP_ALIVE_TIMEOUT).to_i,
           TimeUnit::SECONDS,
           LinkedBlockingQueue.new
         )
