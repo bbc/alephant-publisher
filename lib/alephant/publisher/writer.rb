@@ -19,19 +19,25 @@ module Alephant
       def initialize(config, message)
         @config   = config
         @message  = message
+      end
 
-        @cache = Cache.new(
+      def mapper
+        @mapper ||= RenderMapper.new(
+          config[:renderer_id],
+          config[:view_path]
+        )
+      end
+
+      def cache
+        Cache.new(
           config[:s3_bucket_id],
           config[:s3_object_path]
         )
+      end
 
-        @parser = Support::Parser.new(
+      def parser
+        @parser ||= Support::Parser.new(
           config[:msg_vary_id_path]
-        )
-
-        @mapper = RenderMapper.new(
-          config[:renderer_id],
-          config[:view_path]
         )
       end
 
