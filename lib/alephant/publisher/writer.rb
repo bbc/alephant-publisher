@@ -52,14 +52,8 @@ module Alephant
       end
 
       def write(id, r)
-        begin
-          seq_for(id).sequence(message) do
-            store(id, r.render, location_for(id))
-          end
-        rescue Exception => e
-          logger.warn "Alephant::Publisher::Writer#write: #{e.message}\n#{e.backtrace.join('\n')}"
-
-          raise e
+        seq_for(id).sequence(message) do
+          store(id, r.render, location_for(id))
         end
       end
 
