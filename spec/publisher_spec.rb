@@ -14,12 +14,3 @@ describe Alephant::Publisher do
   end
 end
 
-describe Alephant::Publisher::PublishTask do
-  before(:each) do
-    Alephant::Publisher::PublishTask.any_instance
-      .stub(:initialize)
-  end
-
-  it { should respond_to(:call) }
-
-end
