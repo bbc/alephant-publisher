@@ -29,8 +29,7 @@ module Alephant
           opts[:receive_wait_time]  || RECEIVE_WAIT_TIME,
         )
 
-        @writer_opts = opts.select do |k,v|
-          [
+        @writer_opts = opts.filter [
             :msg_vary_id_path,
             :sequencer_table_name,
             :sequence_id_path,
@@ -39,8 +38,7 @@ module Alephant
             :s3_object_path,
             :view_path,
             :lookup_table_name
-          ].include? k
-        end
+        ]
       end
 
       def run!
