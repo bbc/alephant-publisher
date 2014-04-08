@@ -9,8 +9,7 @@ describe Alephant::Publisher do
 
   describe "#initialize(opts = {}, logger)" do
     it "sets parser, sequencer, queue and writer" do
-      expect(instance.queue).to     be_a Alephant::Publisher::Queue
+      expect(instance.queue).to be_a Alephant::Publisher::Queue
     end
   end
 end
-
