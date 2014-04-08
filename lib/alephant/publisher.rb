@@ -23,22 +23,12 @@ module Alephant
         ::Alephant::Logger.set_logger(logger) unless logger.nil?
 
         @opts = opts
-        @queue = Queue.new(
-          opts[:sqs_queue_url],
-          opts[:visibility_timeout] || VISIBILITY_TIMEOUT,
-          opts[:receive_wait_time]  || RECEIVE_WAIT_TIME,
-        )
 
-        @writer_opts = opts.filter [
-            :msg_vary_id_path,
-            :sequencer_table_name,
-            :sequence_id_path,
-            :renderer_id,
-            :s3_bucket_id,
-            :s3_object_path,
-            :view_path,
-            :lookup_table_name
-        ]
+        @queue = Queue.new(
+          opts.queue[:sqs_queue_url],
+          opts.queue[:visibility_timeout] || VISIBILITY_TIMEOUT,
+          opts.queue[:receive_wait_time]  || RECEIVE_WAIT_TIME,
+        )
       end
 
       def run!
@@ -49,7 +39,7 @@ module Alephant
 
       def process(msg)
         unless msg.nil?
-          Writer.new(@writer_opts, msg).run!
+          Writer.new(@opts.writer, msg).run!
           msg.delete
         end
       end

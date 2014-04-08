@@ -67,6 +67,47 @@ thread = Alephant::Alephant.new(opts, logger).run!
 thread.join
 ```
 
+Publisher requires both queue options and writer options to be provided. To ensure a standard format you should use the `Options` class to generate your options before passing them onto the Publisher...
+
+```ruby
+opts = Alephant::Publisher::Options.new
+# => #<Alephant::Publisher::Options:0x0602f958 @queue={}, @writer={}>
+
+opts.queue
+# => {}
+# empty to start with
+
+opts.writer
+# => {}
+# empty to start with
+
+opts.add_queue(:foo => "bar")
+# The key 'foo' is invalid
+# => nil
+
+opts.queue
+# => {}
+# still empty as the foo key was invalid
+
+opts.add_queue(:sqs_queue_url => "bar")
+# => {:sqs_queue_url=>"bar"}
+
+opts.queue
+# => {:sqs_queue_url=>"bar"}
+
+opts.add_writer(:sqs_queue_url => "bar")
+# The key 'sqs_queue_url' is invalid
+# => nil
+# the sqs_queue_url key was valid for the queue options,
+# but is invalid when trying to add it to the writer options
+
+opts.add_writer(:msg_vary_id_path => "bar")
+=> {:msg_vary_id_path=>"bar"}
+
+opts.writer
+=> {:msg_vary_id_path=>"bar"}
+```
+
 logger is optional, and must confirm to the Ruby standard logger interface
 
 Provide a view in a folder (fixtures are optional):
