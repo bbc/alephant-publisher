@@ -9,20 +9,20 @@ module Alephant
       attr_reader :queue, :writer
 
       QUEUE_OPTS = [
+        :receive_wait_time,
         :sqs_queue_url,
-        :visibility_timeout,
-        :receive_wait_time
+        :visibility_timeout
       ]
 
       WRITER_OPTS = [
+        :lookup_table_name,
         :msg_vary_id_path,
-        :sequencer_table_name,
-        :sequence_id_path,
         :renderer_id,
         :s3_bucket_id,
         :s3_object_path,
-        :view_path,
-        :lookup_table_name
+        :sequence_id_path,
+        :sequencer_table_name,
+        :view_path
       ]
 
       def initialize

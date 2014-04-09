@@ -3,14 +3,14 @@ require 'spec_helper'
 describe Alephant::Publisher::Writer do
   let(:opts) do
     {
-      :s3_bucket_id => :s3_bucket_id,
-      :s3_object_path => :s3_object_path,
-      :renderer_id => :renderer_id,
-      :view_path => :view_path,
-      :lookup_table_name => 'lookup_table_name',
+      :lookup_table_name    => 'lookup_table_name',
+      :msg_vary_id_path     => '$.vary',
+      :renderer_id          => :renderer_id,
+      :s3_bucket_id         => :s3_bucket_id,
+      :s3_object_path       => :s3_object_path,
+      :sequence_id_path     => '$.sequence',
       :sequencer_table_name => :sequencer_table_name,
-      :sequence_id_path => '$.sequence',
-      :msg_vary_id_path => '$.vary',
+      :view_path            => :view_path
     }
   end
 
