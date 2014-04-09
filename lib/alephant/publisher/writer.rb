@@ -13,7 +13,8 @@ require 'alephant/publisher/render_mapper'
 module Alephant
   module Publisher
     class Writer
-      include ::Alephant::Logger
+      include Logger
+
       attr_reader :config, :message, :cache, :parser, :mapper
 
       def initialize(config, message)
@@ -103,7 +104,7 @@ module Alephant
       end
 
       def lookup
-        Lookup.create(config[:lookup_table_name])
+        Lookup.create(config[:lookup_table_name], Logger.get_logger)
       end
     end
   end
