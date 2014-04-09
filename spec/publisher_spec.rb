@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Alephant::Publisher do
-  let(:instance) { Alephant::Publisher.create }
+  let(:options)  { Alephant::Publisher::Options.new }
+  let(:instance) { Alephant::Publisher.create(options) }
 
   before(:each) do
     Alephant::Publisher::Queue.any_instance.stub(:initialize)
