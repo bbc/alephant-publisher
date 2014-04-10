@@ -104,7 +104,7 @@ module Alephant
       end
 
       def lookup
-        Lookup.create(config[:lookup_table_name], Logger.get_logger)
+        Lookup.create(config[:lookup_table_name])
       end
     end
   end
