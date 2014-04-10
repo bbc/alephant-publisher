@@ -8,10 +8,10 @@ require 'alephant/logger'
 
 module Alephant
   module Publisher
-    include ::Alephant::Logger
+    include Logger
 
-    def self.create(opts = {}, logger = nil)
-      Publisher.new(opts, logger)
+    def self.create(opts = {})
+      Publisher.new(opts)
     end
 
     class Publisher
@@ -20,9 +20,7 @@ module Alephant
 
       attr_reader :queue, :executor
 
-      def initialize(opts, logger)
-        ::Alephant::Logger.set_logger(logger) unless logger.nil?
-
+      def initialize(opts)
         @opts = opts
 
         @queue = Queue.new(
