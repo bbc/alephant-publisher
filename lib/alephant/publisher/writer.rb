@@ -76,7 +76,12 @@ module Alephant
       end
 
       def seq_for(id)
-        Sequencer.create(config[:sequencer_table_name], seq_key_from(id), config[:sequence_id_path])
+        Sequencer.create(
+          config[:sequencer_table_name],
+          seq_key_from(id),
+          config[:sequence_id_path],
+          config[:keep_all_messages] == 'true'
+        )
       end
 
       def seq_key_from(id)
