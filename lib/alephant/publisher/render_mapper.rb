@@ -16,7 +16,7 @@ module Alephant
       end
 
       def base_path=(path)
-        @base_path = File.directory?(path) ? path : (raise "Invalid path")
+        @base_path = File.directory?(path) ? path : (raise "Invalid path: '#{path}'")
       end
 
       def generate(data)
