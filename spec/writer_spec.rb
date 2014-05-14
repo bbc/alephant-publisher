@@ -73,7 +73,7 @@ describe Alephant::Publisher::Writer do
         "sequence" => "1",
         "vary" => "foo"
       }
-      Struct.new(:body).new(data.to_json)
+      Struct.new(:body,:id).new(data.to_json,'id')
     end
 
     let(:expected_location) do
@@ -104,7 +104,7 @@ describe Alephant::Publisher::Writer do
       Alephant::Cache
         .any_instance
         .should_receive(:put)
-        .with(expected_location, "content")
+        .with(expected_location, "content", :msg_id=>"id")
     end
 
     after do

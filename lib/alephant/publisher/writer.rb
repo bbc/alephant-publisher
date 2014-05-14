@@ -59,7 +59,7 @@ module Alephant
       end
 
       def store(id, content, location)
-        cache.put(location, content)
+        cache.put(location, content, :msg_id => message.id)
         lookup.write(id, options, seq_id, location)
       end
 

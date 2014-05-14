@@ -44,8 +44,8 @@ module Alephant
 
       def archive_cache
         Cache.new(
-          opts.archiver[:s3_bucket_id],
-          opts.archiver[:s3_object_path]
+          opts.writer[:s3_bucket_id],
+          opts.writer[:s3_object_path]
         )
       end
 

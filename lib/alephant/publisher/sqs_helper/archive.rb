@@ -8,11 +8,28 @@ module Alephant
           @cache = cache
         end
 
-        def archive(m)
+        def see(message)
+          return if message.nil?
 
-          m
+          message.tap do |m|
+            cache.put(
+              "archive/#{m.id}",
+              m.body,
+              message_meta_for(m)
+            )
+          end
         end
 
+        private
+
+        def message_meta_for(m)
+          {
+            :id                => m.id,
+            :md5               => m.md5,
+            :logged_at         => Time.now.to_s,
+            :queue             => m.queue.url,
+          }
+        end
       end
     end
   end

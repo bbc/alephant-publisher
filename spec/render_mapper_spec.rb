@@ -13,13 +13,11 @@ describe Alephant::Publisher::RenderMapper do
 
   describe "initialize(view_base_path)" do
     context "view_base_path = invalid_path" do
-      it "should raise InvalidViewPath" do
+      it "should raise an error" do
         File.stub(:directory?).and_return(false)
         expect {
           subject.new(component_id, './invalid_path')
-        }.to raise_error(
-          'Invalid path'
-        )
+        }.to raise_error
       end
     end
 
