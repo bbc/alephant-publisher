@@ -23,7 +23,7 @@ module Alephant
 
         def message
           recieve.tap do |m|
-            unless m.nil? do
+            unless m.nil?
               logger.info("Queue#message: received #{m.id}")
               archive m
             end
@@ -31,7 +31,9 @@ module Alephant
         end
 
         def archive(m)
-          archiver.see(m)
+          unless m.nil?
+            archiver.see(m)
+          end
         end
 
         def recieve
