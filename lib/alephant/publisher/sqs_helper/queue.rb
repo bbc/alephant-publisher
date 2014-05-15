@@ -22,7 +22,7 @@ module Alephant
         end
 
         def message
-          recieve.tap { |m| process(m) unless m.nil? }
+          receive.tap { |m| process(m) unless m.nil? }
         end
 
         private
@@ -38,7 +38,7 @@ module Alephant
           logger.warn("Queue#archive: archive failed (#{e.message})");
         end
 
-        def recieve
+        def receive
           queue.receive_message({
             :visibility_timeout => timeout,
             :wait_time_seconds  => wait_time
