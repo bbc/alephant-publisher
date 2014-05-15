@@ -3,7 +3,7 @@ require_relative 'env'
 require 'alephant/publisher/version'
 require 'alephant/publisher/options'
 require 'alephant/publisher/sqs_helper/queue'
-require 'alephant/publisher/sqs_helper/archive'
+require 'alephant/publisher/sqs_helper/archiver'
 require 'alephant/publisher/writer'
 require 'alephant/logger'
 

@@ -12,7 +12,7 @@ module Alephant
 
         attr_reader :queue, :timeout, :wait_time, :archiver
 
-        def initialize(queue, archiver, timeout = VISABILITY_TIMEOUT, wait_time = WAIT_TIME)
+        def initialize(queue, archiver = nil, timeout = VISABILITY_TIMEOUT, wait_time = WAIT_TIME)
           @queue     = queue
           @archiver  = archiver
           @timeout   = timeout
@@ -22,18 +22,20 @@ module Alephant
         end
 
         def message
-          recieve.tap do |m|
-            unless m.nil?
-              logger.info("Queue#message: received #{m.id}")
-              archive m
-            end
-          end
+          recieve.tap { |m| process(m) unless m.nil? }
+        end
+
+        private
+
+        def process(m)
+          logger.info("Queue#message: received #{m.id}")
+          archive m
         end
 
         def archive(m)
-          unless m.nil?
-            archiver.see(m)
-          end
+          archiver.see(m) unless archiver.nil?
+        rescue StandardError => e
+          logger.warn("Queue#archive: archive failed (#{e.message})");
         end
 
         def recieve
