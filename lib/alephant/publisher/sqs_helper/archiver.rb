@@ -1,3 +1,5 @@
+require 'date'
+
 module Alephant
   module Publisher
     module SQSHelper
@@ -21,14 +23,18 @@ module Alephant
         end
 
         def store(m)
-          cache.put("archive/#{m.id}", m.body, meta_for(m))
+          cache.put("archive/#{date_key}/#{m.id}", m.body, meta_for(m))
+        end
+
+        def date_key
+          DateTime.now.strftime('%d-%m-%Y_%H')
         end
 
         def meta_for(m)
           {
             :id                => m.id,
             :md5               => m.md5,
-            :logged_at         => Time.now.to_s,
+            :logged_at         => DateTime.now.to_s,
             :queue             => m.queue.url,
           }
         end

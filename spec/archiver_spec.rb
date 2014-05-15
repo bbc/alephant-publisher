@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Alephant::Publisher::SQSHelper::Archiver do
   describe "#see" do
     it "calls cache put with the correct params" do
-      time_now = Time.parse("Feb 24 1981")
-      Time.stub!(:now).and_return(time_now)
+      time_now = DateTime.parse("Feb 24 1981")
+      DateTime.stub(:now).and_return(time_now)
 
       q = double("queue").as_null_object
       c = double("cache").as_null_object
@@ -14,7 +14,7 @@ describe Alephant::Publisher::SQSHelper::Archiver do
       m = Struct.new(:id, :body, :md5, :queue).new('id', 'body', 'md5', q)
 
       expect(c).to receive(:put).with(
-        "archive/id",
+        "archive/#{time_now.strftime('%d-%m-%Y_%H')}/id",
         "body",
         {
           :id        => "id",
