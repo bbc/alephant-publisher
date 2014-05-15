@@ -2,27 +2,29 @@ module Alephant
   module Publisher
     module SQSHelper
       class Archiver
-        attr_reader :cache
+        attr_reader :cache, :async
 
-        def initialize(cache)
+        def initialize(cache, async = true)
+          @async = async
           @cache = cache
         end
 
         def see(message)
           return if message.nil?
-
-          message.tap do |m|
-            cache.put(
-              "archive/#{m.id}",
-              m.body,
-              message_meta_for(m)
-            )
-          end
+          message.tap { |m| async ? async_store(m) : store(m) }
         end
 
         private
 
-        def message_meta_for(m)
+        def async_store(m)
+          Thread.new { store(m) }
+        end
+
+        def store(m)
+          cache.put("archive/#{m.id}", m.body, meta_for(m))
+        end
+
+        def meta_for(m)
           {
             :id                => m.id,
             :md5               => m.md5,
@@ -34,3 +36,4 @@ module Alephant
     end
   end
 end
+
