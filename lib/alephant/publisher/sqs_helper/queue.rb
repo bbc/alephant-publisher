@@ -18,7 +18,7 @@ module Alephant
           @timeout   = timeout
           @wait_time = wait_time
 
-          logger.info("Queue#initialize: reading from #{queue.url}")
+          logger.debug("Queue#initialize: reading from #{queue.url}")
         end
 
         def message
