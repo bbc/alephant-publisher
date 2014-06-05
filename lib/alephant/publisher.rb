@@ -6,10 +6,12 @@ require 'alephant/publisher/sqs_helper/queue'
 require 'alephant/publisher/sqs_helper/archiver'
 require 'alephant/publisher/writer'
 require 'alephant/logger'
+require 'alephant/support/aop'
 
 module Alephant
   module Publisher
     include Logger
+    extend Alephant::Support::AOP
 
     def self.create(opts = {})
       Publisher.new(opts)
