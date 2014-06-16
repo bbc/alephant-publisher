@@ -55,9 +55,13 @@ module Alephant
         AWS::SQS.new.queues[opts.queue[:sqs_queue_url]]
       end
 
+      def write(msg)
+        Writer.new(opts.writer, msg).run!
+      end
+
       def process(msg)
         unless msg.nil?
-          Writer.new(@opts.writer, msg).run!
+          write msg
           msg.delete
         end
       end
