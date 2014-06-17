@@ -46,7 +46,7 @@ module Alephant
         batch? ? batch.sequence(message, &perform) : perform.call
       end
 
-      private
+      protected
 
       def perform
         Proc.new { renders.peach { |id, r| write(id, r) } }
