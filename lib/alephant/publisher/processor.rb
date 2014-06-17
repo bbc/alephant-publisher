@@ -13,7 +13,6 @@ module Alephant
       def consume(msg)
         unless msg.nil?
           write msg
-          puts 'Go and delete message'
           msg.delete
         end
       end
