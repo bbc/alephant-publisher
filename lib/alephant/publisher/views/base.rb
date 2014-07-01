@@ -1,20 +1,18 @@
+require 'alephant/publisher/views/register'
 require 'mustache'
-require 'alephant/publisher/views'
-require 'hashie'
-require 'json'
 require 'i18n'
 
 module Alephant::Publisher::Views
   class Base < Mustache
+    include Register
+
     attr_accessor :data
 
     class << self
       attr_accessor :base_path
     end
 
-    def initialize(data = {})
-      @data = Hashie::Mash.new data
-
+    def setup
       load_translations_from base_path
     end
 
@@ -66,14 +64,6 @@ module Alephant::Publisher::Views
       self.class.base_path
     end
 
-    def self.inherited(subclass)
-      current_dir = File.dirname(caller.first[/^[^:]+/])
-      dir_path = Pathname.new(File.join(current_dir,'..')).realdirpath
-
-      subclass.base_path = dir_path.to_s
-
-      Alephant::Publisher::Views.register(subclass)
-    end
   end
 end
 
