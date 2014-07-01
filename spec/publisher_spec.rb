@@ -5,7 +5,7 @@ describe Alephant::Publisher do
   let(:instance) { Alephant::Publisher.create(options) }
 
   before(:each) do
-    Alephant::Publisher::SQSHelper::Queue.any_instance.stub(:initialize)
+    allow_any_instance_of(Alephant::Publisher::SQSHelper::Queue).to receive(:initialize)
   end
 
   describe "#initialize(opts = {}, logger)" do

@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Alephant::Publisher::Processor do
 
   before(:each) do
-    Alephant::Publisher::Writer.any_instance.stub(:initialize)
-    Alephant::Publisher::Writer.any_instance.stub(:run!)
+    allow_any_instance_of(Alephant::Publisher::Writer).to receive(:initialize)
+    allow_any_instance_of(Alephant::Publisher::Writer).to receive(:run!)
   end
 
   describe "#consume(msg)" do

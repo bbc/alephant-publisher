@@ -8,7 +8,7 @@ require 'alephant/lookup'
 require 'alephant/logger'
 require 'alephant/sequencer'
 require 'alephant/support/parser'
-require 'alephant/publisher/render_mapper'
+require 'alephant/publisher/view_mapper'
 
 module Alephant
   module Publisher
@@ -23,7 +23,7 @@ module Alephant
       end
 
       def mapper
-        @mapper ||= RenderMapper.new(
+        @mapper ||= ViewMapper.new(
           config[:renderer_id],
           config[:view_path]
         )
@@ -49,17 +49,17 @@ module Alephant
       protected
 
       def perform
-        Proc.new { renders.peach { |id, r| write(id, r) } }
+        Proc.new { views.each { |id, view| write(id, view) } }
       end
 
-      def write(id, r)
+      def write(id, view)
         seq_for(id).sequence(message) do
-          store(id, r.render, location_for(id))
+          store(id, view, location_for(id))
         end
       end
 
-      def store(id, content, location)
-        cache.put(location, content, :msg_id => message.id)
+      def store(id, view, location)
+        cache.put(location, view.render, view.content_type, :msg_id => message.id)
         lookup.write(id, options, seq_id, location)
       end
 
@@ -68,7 +68,7 @@ module Alephant
       end
 
       def batch
-        @batch ||= (renders.count > 1) ? seq_for(config[:renderer_id]) : nil
+        @batch ||= (views.count > 1) ? seq_for(config[:renderer_id]) : nil
       end
 
       def batch?
@@ -92,8 +92,8 @@ module Alephant
         @seq_id ||= Sequencer::Sequencer.sequence_id_from(message, config[:sequence_id_path])
       end
 
-      def renders
-        @renders ||= mapper.generate(data)
+      def views
+        @views ||= mapper.generate(data)
       end
 
       def opt_hash
