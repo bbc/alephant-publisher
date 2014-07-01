@@ -7,6 +7,8 @@ require 'alephant/publisher/sqs_helper/archiver'
 require 'alephant/logger'
 require 'alephant/support/aop'
 require 'alephant/publisher/processor'
+require 'alephant/publisher/views'
+require 'alephant/publisher/views/base'
 
 module Alephant
   module Publisher

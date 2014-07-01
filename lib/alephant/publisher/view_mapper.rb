@@ -2,8 +2,10 @@ require 'alephant/logger'
 
 module Alephant
   module Publisher
-    class RenderMapper
-      include ::Alephant::Logger
+    class ViewMapper
+      include Logger
+      include Renderer
+
       DEFAULT_LOCATION = 'components'
 
       def initialize(component_id, view_base_path=nil)
@@ -20,20 +22,17 @@ module Alephant
       end
 
       def generate(data)
-        template_locations.reduce({}) do |obj, file|
-          template_id = template_id_for file
-          obj.tap { |o| o[template_id] = create_renderer(template_id, data) }
+        model_locations.reduce({}) do |obj, file|
+          obj.tap do |o|
+            model_id = model_id_for file
+            o[model_id] = model(model_id, data)
+          end
         end
-      end
-
-      def create_renderer(template_file, data)
-        model = instantiate_model(template_file, data)
-        Renderer.create(template_file, base_path, model)
       end
 
       private
 
-      def instantiate_model(view_id, data)
+      def model(view_id, data)
         require model_location_for view_id
         Views.get_registered_class(view_id).new(data)
       end
@@ -42,16 +41,16 @@ module Alephant
         File.join(base_path, 'models', "#{template_file}.rb")
       end
 
-     def template_locations
-        Dir[template_base_path]
+      def model_locations
+        Dir[model_base_path]
       end
 
-      def template_base_path
-        "#{base_path}/templates/*"
+      def model_base_path
+        "#{base_path}/models/*"
       end
 
-      def template_id_for(template_location)
-        template_location.split('/').last.sub(/\.mustache/, '')
+      def model_id_for(location)
+        location.split('/').last.sub(/\.rb/, '')
       end
 
     end
