@@ -1,69 +1,44 @@
-require 'alephant/publisher/views/register'
-require 'mustache'
-require 'i18n'
+require 'alephant/publisher/views'
+require 'json'
+require 'hashie'
 
 module Alephant::Publisher::Views
-  class Base < Mustache
-    include Register
+  module Base
+    def self.included base
+      base.send :include, InstanceMethods
+      base.extend ClassMethods
+    end
 
-    attr_accessor :data
+    module InstanceMethods
+      attr_reader :data, :content_type, :base_path
 
-    class << self
+      def initialize(data = {})
+        @data = Hashie::Mash.new data
+        @base_path = self.class.base_path
+
+        setup
+      end
+
+      def to_h
+        whitelist.reduce({}) { |m,s| m.tap { |m| m[s] = self.send(s) } }
+      end
+
+      def setup; end
+      def whitelist; [] end
+    end
+
+    module ClassMethods
       attr_accessor :base_path
-    end
 
-    def setup
-      load_translations_from base_path
-    end
+      def inherited(subclass)
+        current_dir = File.dirname(caller.first[/^[^:]+/])
+        dir_path    = Pathname.new(File.join(current_dir,'..')).realdirpath
 
-    def locale
-      :en
-    end
+        subclass.base_path = dir_path.to_s
 
-    private
-
-    def load_translations_from(base_path)
-      if I18n.load_path.empty?
-        I18n.config.enforce_available_locales = false
-        I18n.load_path = i18n_load_path_from(base_path)
-        I18n.backend.load_translations
+        Alephant::Publisher::Views.register(subclass)
       end
     end
-
-    def i18n_load_path_from(base_path)
-      Dir[
-        File.join(
-          Pathname.new(base_path).parent,
-          'locale',
-          '*.yml')
-      ]
-      .flatten
-      .uniq
-    end
-
-    def t(key, params = {})
-      I18n.locale = locale
-      prefix = /\/([^\/]+)\.mustache/.match(template_file)[1]
-      params.merge! :default => key unless params[:default]
-      translation = I18n.translate("#{prefix}.#{key}", params)
-    end
-
-    def template
-      @template_string ||= File.open(template_file).read
-    end
-
-    def template_name
-      Mustache.underscore(self.class.to_s).split('/').last
-    end
-
-    def template_file
-      File.join(base_path,'templates',"#{template_name}.#{template_extension}")
-    end
-
-    def base_path
-      self.class.base_path
-    end
-
   end
 end
 

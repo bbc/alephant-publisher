@@ -54,12 +54,12 @@ module Alephant
 
       def write(id, view)
         seq_for(id).sequence(message) do
-          store(id, view.render, location_for(id))
+          store(id, view, location_for(id))
         end
       end
 
-      def store(id, content, location)
-        cache.put(location, content, :msg_id => message.id)
+      def store(id, view, location)
+        cache.put(location, view.render, view.content_type, :msg_id => message.id)
         lookup.write(id, options, seq_id, location)
       end
 

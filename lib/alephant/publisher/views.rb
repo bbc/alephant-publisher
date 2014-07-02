@@ -1,4 +1,5 @@
-require 'alephant/publisher/views/base'
+require 'alephant/publisher/views/html'
+require 'alephant/publisher/views/json'
 
 module Alephant
   module Publisher
