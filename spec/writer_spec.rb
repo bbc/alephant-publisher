@@ -17,7 +17,7 @@ describe Alephant::Publisher::Writer do
   before(:each) do
     AWS.stub!
 
-    Alephant::Publisher::RenderMapper
+    Alephant::Publisher::ViewMapper
       .any_instance
       .should_receive(:initialize)
       .with(
@@ -58,11 +58,11 @@ describe Alephant::Publisher::Writer do
       .any_instance
       .stub(:table_name)
 
-    Alephant::Publisher::RenderMapper
+    Alephant::Publisher::ViewMapper
       .any_instance
       .stub(:generate)
       .and_return({
-        'component_id' => Struct.new(:render).new('content')
+        'component_id' => Struct.new(:render, :content_type).new('content', 'foo/bar')
       })
 
   end
@@ -104,7 +104,7 @@ describe Alephant::Publisher::Writer do
       Alephant::Cache
         .any_instance
         .should_receive(:put)
-        .with(expected_location, "content", :msg_id=>"id")
+        .with(expected_location, "content", "foo/bar", :msg_id=>"id")
     end
 
     after do

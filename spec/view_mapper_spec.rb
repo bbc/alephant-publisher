@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Alephant::Publisher::RenderMapper do
+describe Alephant::Publisher::ViewMapper do
   let(:component_id) { :foo }
   let(:data) {{ :foo => :bar }}
   let(:path) { File.join(File.dirname(__FILE__), 'fixtures/components') }
 
-  subject { Alephant::Publisher::RenderMapper }
+  subject { Alephant::Publisher::ViewMapper }
 
   before(:each) do
     File.stub(:directory?).and_return(true)
@@ -33,24 +33,8 @@ describe Alephant::Publisher::RenderMapper do
       it "sets base_path" do
         expect(
           subject.new(component_id).base_path
-        ).to eq(Alephant::Publisher::RenderMapper::DEFAULT_LOCATION)
+        ).to eq(Alephant::Publisher::ViewMapper::DEFAULT_LOCATION)
       end
-    end
-  end
-
-  describe "create_renderer(template_file, data)" do
-    it "Returns a valid renderer" do
-      expect(
-        subject.new(component_id, path)
-          .create_renderer('foo', { :content => 'hello'})
-      ).to be_a(Alephant::Renderer::Mustache)
-    end
-
-    it "Returns expected rendered content from a render" do
-      expect(
-        subject.new(component_id, path)
-          .create_renderer('foo', { :content => 'hello'}).render
-      ).to eq("hello\n")
     end
   end
 
