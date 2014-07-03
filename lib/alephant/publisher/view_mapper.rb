@@ -37,8 +37,8 @@ module Alephant
         Views.get_registered_class(view_id).new(data)
       end
 
-      def model_location_for(template_file)
-        File.join(base_path, 'models', "#{template_file}.rb")
+      def model_location_for(view_id)
+        File.join(base_path, 'models', "#{view_id}.rb")
       end
 
       def model_locations
