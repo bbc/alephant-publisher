@@ -4,7 +4,7 @@ describe Alephant::Publisher::SQSHelper::Archiver do
   describe "#see" do
     it "calls cache put with the correct params" do
       time_now = DateTime.parse("Feb 24 1981")
-      DateTime.stub(:now).and_return(time_now)
+      allow(DateTime).to receive(:now).and_return(time_now)
 
       q = double("queue").as_null_object
       c = double("cache").as_null_object

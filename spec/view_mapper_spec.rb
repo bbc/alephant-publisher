@@ -7,14 +7,9 @@ describe Alephant::Publisher::ViewMapper do
 
   subject { Alephant::Publisher::ViewMapper }
 
-  before(:each) do
-    File.stub(:directory?).and_return(true)
-  end
-
   describe "initialize(view_base_path)" do
     context "view_base_path = invalid_path" do
       it "should raise an error" do
-        File.stub(:directory?).and_return(false)
         expect {
           subject.new(component_id, './invalid_path')
         }.to raise_error
@@ -24,8 +19,8 @@ describe Alephant::Publisher::ViewMapper do
     context "view_base_path = '.'" do
       it "sets base_path" do
         expect(
-          subject.new(component_id, '.').base_path
-        ).to eq("./#{component_id}")
+          subject.new(component_id, path).base_path
+        ).to eq("#{path}/#{component_id}")
       end
     end
 

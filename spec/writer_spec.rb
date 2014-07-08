@@ -17,50 +17,32 @@ describe Alephant::Publisher::Writer do
   before(:each) do
     AWS.stub!
 
-    Alephant::Publisher::ViewMapper
-      .any_instance
-      .should_receive(:initialize)
+    allow_any_instance_of(Alephant::Publisher::ViewMapper).to receive(:initialize)
       .with(
         opts[:renderer_id],
         opts[:view_path]
       )
 
-    Alephant::Cache
-      .any_instance
-      .should_receive(:initialize)
+    allow_any_instance_of(Alephant::Cache).to receive(:initialize)
       .with(
         opts[:s3_bucket_id],
         opts[:s3_object_path]
       )
 
-    Alephant::Sequencer::SequenceTable
-      .any_instance
-      .stub(:create)
+    allow_any_instance_of(Alephant::Sequencer::SequenceTable).to receive(:create)
 
-    Alephant::Sequencer::Sequencer
-      .any_instance
-      .stub(:sequencer_id_from)
+    allow_any_instance_of(Alephant::Sequencer::Sequencer).to receive(:sequencer_id_from)
       .and_return(1)
 
-    Alephant::Sequencer::Sequencer
-      .any_instance
-      .stub(:set_last_seen)
+    allow_any_instance_of(Alephant::Sequencer::Sequencer).to receive(:set_last_seen)
 
-    Alephant::Sequencer::Sequencer
-      .any_instance
-      .stub(:get_last_seen)
+    allow_any_instance_of(Alephant::Sequencer::Sequencer).to receive(:get_last_seen)
 
-    Alephant::Lookup::LookupTable
-      .any_instance
-      .stub(:create)
+    allow_any_instance_of(Alephant::Lookup::LookupTable).to receive(:create)
 
-    Alephant::Lookup::LookupTable
-      .any_instance
-      .stub(:table_name)
+    allow_any_instance_of(Alephant::Lookup::LookupTable).to receive(:table_name)
 
-    Alephant::Publisher::ViewMapper
-      .any_instance
-      .stub(:generate)
+    allow_any_instance_of(Alephant::Publisher::ViewMapper).to receive(:generate)
       .and_return({
         'component_id' => Struct.new(:render, :content_type).new('content', 'foo/bar')
       })
@@ -85,11 +67,9 @@ describe Alephant::Publisher::Writer do
     end
 
     it "should write the correct lookup location" do
-      Alephant::Cache.any_instance.stub(:put)
+      allow_any_instance_of(Alephant::Cache).to receive(:put)
 
-      Alephant::Lookup::LookupHelper
-        .any_instance
-        .should_receive(:write)
+      allow_any_instance_of(Alephant::Lookup::LookupHelper).to receive(:write)
         .with(
           "component_id",
           {:variant=>"foo"},
@@ -99,11 +79,9 @@ describe Alephant::Publisher::Writer do
     end
 
     it "should put the correct location, content to cache" do
-      Alephant::Lookup::LookupHelper.any_instance.stub(:write)
+      allow_any_instance_of(Alephant::Lookup::LookupHelper).to receive(:write)
 
-      Alephant::Cache
-        .any_instance
-        .should_receive(:put)
+      allow_any_instance_of(Alephant::Cache).to receive(:put)
         .with(expected_location, "content", "foo/bar", :msg_id=>"id")
     end
 
