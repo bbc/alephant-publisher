@@ -37,7 +37,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'crimp'
   spec.add_runtime_dependency 'peach'
   spec.add_runtime_dependency 'i18n'
-  spec.add_runtime_dependency 'mustache'
   spec.add_runtime_dependency 'hashie'
   spec.add_runtime_dependency 'alephant-support'
   spec.add_runtime_dependency 'alephant-sequencer'
