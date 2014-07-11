@@ -56,7 +56,7 @@ module Alephant
       end
 
       def aws_queue
-        AWS::SQS.new.queues[opts.queue[:sqs_queue_url]]
+        AWS::SQS.new.queues.named(opts.queue[:sqs_queue_name])
       end
 
     end

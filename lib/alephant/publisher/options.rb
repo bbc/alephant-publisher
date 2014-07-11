@@ -10,7 +10,7 @@ module Alephant
 
       QUEUE_OPTS = [
         :receive_wait_time,
-        :sqs_queue_url,
+        :sqs_queue_name,
         :visibility_timeout
       ]
 
