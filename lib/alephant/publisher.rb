@@ -9,6 +9,7 @@ require 'alephant/support/aop'
 require 'alephant/publisher/processor'
 require 'alephant/publisher/views'
 require 'alephant/publisher/views/base'
+require 'json'
 
 module Alephant
   module Publisher

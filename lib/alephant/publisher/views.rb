@@ -1,6 +1,3 @@
-require 'alephant/publisher/views/html'
-require 'alephant/publisher/views/json'
-
 module Alephant
   module Publisher
     module Views
