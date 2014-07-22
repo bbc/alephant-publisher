@@ -4,7 +4,6 @@ module Alephant
   module Publisher
     class ViewMapper
       include Logger
-      include Renderer
 
       DEFAULT_LOCATION = 'components'
 
