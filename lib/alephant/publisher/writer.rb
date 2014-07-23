@@ -2,8 +2,6 @@ require 'peach'
 require 'crimp'
 
 require 'alephant/cache'
-require 'alephant/views'
-require 'alephant/renderer'
 require 'alephant/lookup'
 require 'alephant/logger'
 require 'alephant/sequencer'
