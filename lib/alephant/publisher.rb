@@ -56,8 +56,17 @@ module Alephant
         )
       end
 
+      def sqs_client
+        @sqs_client ||= AWS::SQS.new
+      end
+
+      def sqs_queue_options
+        opts.queue[:aws_account_id].nil? ? {} : { :queue_owner_aws_account_id => opts.queue[:aws_account_id] }
+      end
+
       def aws_queue
-        AWS::SQS.new.queues.named(opts.queue[:sqs_queue_name])
+        queue_url = sqs_client.queues.url_for(opts.queue[:sqs_queue_name], sqs_queue_options)
+        sqs_client.queues[queue_url]
       end
 
     end

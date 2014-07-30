@@ -11,7 +11,8 @@ module Alephant
       QUEUE_OPTS = [
         :receive_wait_time,
         :sqs_queue_name,
-        :visibility_timeout
+        :visibility_timeout,
+        :aws_account_id
       ]
 
       WRITER_OPTS = [
