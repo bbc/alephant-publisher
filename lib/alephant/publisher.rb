@@ -3,7 +3,6 @@ require_relative 'env'
 require 'alephant/publisher/version'
 require 'alephant/publisher/options'
 require 'alephant/logger'
-require 'alephant/support/aop'
 require 'alephant/publisher/queue_based_processor'
 require 'alephant/publisher/views'
 require 'alephant/publisher/views/base'
@@ -12,7 +11,6 @@ require 'json'
 module Alephant
   module Publisher
     include Logger
-    extend Alephant::Support::AOP
 
     def self.create(processor)
       raise ArgumentError, "No processor given." unless processor
