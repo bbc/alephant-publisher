@@ -1,31 +1,23 @@
 require_relative 'env'
 
 require 'alephant/publisher/version'
-require 'alephant/publisher/options'
 require 'alephant/logger'
-require 'alephant/publisher/processor/queue_based'
-require 'alephant/publisher/views'
-require 'alephant/publisher/views/base'
+require 'alephant/publisher/queue_based'
+require 'alephant/publisher/request_based'
 require 'json'
 
 module Alephant
   module Publisher
     include Logger
 
-    def self.create(processor)
-      raise ArgumentError, "No processor given." unless processor
-      Publisher.new processor
-    end
-
-    class Publisher
-      attr_reader :processor
-
-      def initialize(processor)
-        @processor = processor
-      end
-
-      def run!
-        loop { processor.consume }
+    def self.create(opts)
+      case opts[:strategy]
+      when "request"
+        Alephant::Publisher::RequestBased.new opts
+      when "queue"
+        Alephant::Publisher::QueueBased.new opts
+      else
+        raise ArgumentError, "No strategy given"
       end
     end
   end
