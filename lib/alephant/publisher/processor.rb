@@ -1,6 +1,6 @@
 module Alephant
   module Publisher
-    class BaseProcessor
+    class Processor
 
       def consume(msg)
         raise NotImplementedError.new("You must implement the #consume(msg) method")

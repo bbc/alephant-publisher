@@ -1,11 +1,11 @@
 require 'alephant/publisher/writer'
-require 'alephant/publisher/processor/base'
+require 'alephant/publisher/processor'
 require 'alephant/publisher/sqs_helper/queue'
 require 'alephant/publisher/sqs_helper/archiver'
 
 module Alephant
   module Publisher
-    class QueueBasedProcessor < BaseProcessor
+    class QueueBasedProcessor < Processor
       VISIBILITY_TIMEOUT = 60
       RECEIVE_WAIT_TIME  = 15
 
