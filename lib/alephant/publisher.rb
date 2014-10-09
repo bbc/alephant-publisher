@@ -5,7 +5,6 @@ require 'alephant/publisher/options'
 require 'alephant/publisher/sqs_helper/queue'
 require 'alephant/publisher/sqs_helper/archiver'
 require 'alephant/logger'
-require 'alephant/support/aop'
 require 'alephant/publisher/processor'
 require 'alephant/publisher/views'
 require 'alephant/publisher/views/base'
@@ -14,7 +13,6 @@ require 'json'
 module Alephant
   module Publisher
     include Logger
-    extend Alephant::Support::AOP
 
     def self.create(opts = {}, processor = nil)
       processor ||= Processor.new(opts.writer)

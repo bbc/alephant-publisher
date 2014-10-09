@@ -28,17 +28,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-nav"
   spec.add_development_dependency 'rake-rspec'
 
-  spec.add_runtime_dependency 'sinatra'
-  spec.add_runtime_dependency 'faraday'
-  spec.add_runtime_dependency 'trollop'
   spec.add_runtime_dependency 'rake'
   spec.add_runtime_dependency 'aws-sdk', '~> 1.0'
-  spec.add_runtime_dependency 'mustache', '>= 0.99.5'
-  spec.add_runtime_dependency 'jsonpath'
   spec.add_runtime_dependency 'crimp'
-  spec.add_runtime_dependency 'peach'
-  spec.add_runtime_dependency 'i18n'
-  spec.add_runtime_dependency 'hashie'
   spec.add_runtime_dependency 'alephant-support'
   spec.add_runtime_dependency 'alephant-sequencer'
   spec.add_runtime_dependency 'alephant-cache'
