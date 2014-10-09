@@ -4,6 +4,6 @@ require 'rspec/core/rake_task'
 require 'bundler/gem_tasks'
 require 'alephant/publisher'
 
-RSpec::Core::RakeTask.new(:spec)
+require 'rake/rspec'
 
 task :default => :spec
