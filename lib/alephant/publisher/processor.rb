@@ -17,10 +17,11 @@ module Alephant
         end
       end
 
+      private
+
       def write(msg)
         Writer.new(writer_config, msg).run!
       end
-
     end
   end
 end
