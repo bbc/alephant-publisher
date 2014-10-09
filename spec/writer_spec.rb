@@ -17,12 +17,6 @@ describe Alephant::Publisher::Writer do
   before(:each) do
     AWS.stub!
 
-    allow_any_instance_of(Alephant::Publisher::ViewMapper).to receive(:initialize)
-      .with(
-        opts[:renderer_id],
-        opts[:view_path]
-      )
-
     allow_any_instance_of(Alephant::Cache).to receive(:initialize)
       .with(
         opts[:s3_bucket_id],
@@ -42,11 +36,7 @@ describe Alephant::Publisher::Writer do
 
     allow_any_instance_of(Alephant::Lookup::LookupTable).to receive(:table_name)
 
-    allow_any_instance_of(Alephant::Publisher::ViewMapper).to receive(:generate)
-      .and_return({
-        'component_id' => Struct.new(:render, :content_type).new('content', 'foo/bar')
-      })
-
+    allow(renderer).to receive(:views).and_return({})
   end
 
   describe "#run!" do
@@ -62,8 +52,12 @@ describe Alephant::Publisher::Writer do
       'renderer_id/component_id/218c835cec343537589dbf1619532e4d/1'
     end
 
+    let(:renderer) do
+      instance_double 'Alephant::Renderer::Renderer'
+    end
+
     subject do
-      Alephant::Publisher::Writer.new(opts, msg)
+      Alephant::Publisher::Writer.new(opts, msg, renderer)
     end
 
     it "should write the correct lookup location" do

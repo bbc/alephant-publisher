@@ -6,8 +6,6 @@ require 'alephant/publisher/sqs_helper/queue'
 require 'alephant/publisher/sqs_helper/archiver'
 require 'alephant/logger'
 require 'alephant/publisher/processor'
-require 'alephant/publisher/views'
-require 'alephant/publisher/views/base'
 require 'json'
 
 module Alephant

@@ -5,25 +5,18 @@ require 'alephant/lookup'
 require 'alephant/logger'
 require 'alephant/sequencer'
 require 'alephant/support/parser'
-require 'alephant/publisher/view_mapper'
 
 module Alephant
   module Publisher
     class Writer
       include Logger
 
-      attr_reader :config, :message, :cache, :parser, :mapper
+      attr_reader :config, :message, :cache, :parser, :mapper, :renderer
 
-      def initialize(config, message)
+      def initialize(config, message, renderer)
         @config   = config
         @message  = message
-      end
-
-      def mapper
-        @mapper ||= ViewMapper.new(
-          config[:renderer_id],
-          config[:view_path]
-        )
+        @renderer = renderer
       end
 
       def cache
@@ -90,7 +83,7 @@ module Alephant
       end
 
       def views
-        @views ||= mapper.generate(data)
+        @views ||= renderer.views
       end
 
       def opt_hash
