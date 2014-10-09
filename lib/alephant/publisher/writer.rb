@@ -5,18 +5,19 @@ require 'alephant/lookup'
 require 'alephant/logger'
 require 'alephant/sequencer'
 require 'alephant/support/parser'
+require 'alephant/renderer'
 
 module Alephant
   module Publisher
     class Writer
       include Logger
 
-      attr_reader :config, :message, :cache, :parser, :mapper, :renderer
+      attr_reader :config, :message, :cache, :parser, :renderer
 
-      def initialize(config, message, renderer)
+      def initialize(config, message)
         @config   = config
         @message  = message
-        @renderer = renderer
+        @renderer = Alephant::Renderer.create(config, data)
       end
 
       def cache

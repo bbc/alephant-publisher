@@ -1,6 +1,5 @@
 require 'alephant/publisher/writer'
 require 'alephant/publisher/processor/base'
-require 'alephant/renderer'
 
 module Alephant
   module Publisher
@@ -18,11 +17,11 @@ module Alephant
         end
       end
 
-      def write(msg)
-        renderer = Alephant::Renderer.create(writer_config, msg)
-        Writer.new(writer_config, msg, renderer).run!
-      end
+      private
 
+      def write(msg)
+        Writer.new(writer_config, msg).run!
+      end
     end
   end
 end

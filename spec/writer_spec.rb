@@ -36,7 +36,7 @@ describe Alephant::Publisher::Writer do
 
     allow_any_instance_of(Alephant::Lookup::LookupTable).to receive(:table_name)
 
-    allow(renderer).to receive(:views).and_return({})
+    allow_any_instance_of(Alephant::Renderer::Renderer).to receive(:views).and_return({})
   end
 
   describe "#run!" do
@@ -57,7 +57,7 @@ describe Alephant::Publisher::Writer do
     end
 
     subject do
-      Alephant::Publisher::Writer.new(opts, msg, renderer)
+      Alephant::Publisher::Writer.new(opts, msg)
     end
 
     it "should write the correct lookup location" do
