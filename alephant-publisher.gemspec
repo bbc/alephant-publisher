@@ -43,4 +43,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'alephant-cache'
   spec.add_runtime_dependency 'alephant-logger'
   spec.add_runtime_dependency 'alephant-lookup'
+
+  spec.post_install_message = "WARNING: alephant-publisher has been deprecated in favour of alephant-publisher-queue."
 end
