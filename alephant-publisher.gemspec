@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'trollop'
   spec.add_runtime_dependency 'rake'
-  spec.add_runtime_dependency 'aws-sdk', '~> 1.0'
+  spec.add_runtime_dependency 'aws-sdk-v1'
   spec.add_runtime_dependency 'mustache', '>= 0.99.5'
   spec.add_runtime_dependency 'jsonpath'
   spec.add_runtime_dependency 'crimp'

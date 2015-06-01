@@ -1,4 +1,4 @@
-require 'aws-sdk'
+require 'aws-sdk-v1'
 require 'yaml'
 
 config_file = 'config/aws.yaml'
