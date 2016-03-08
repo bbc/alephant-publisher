@@ -1,9 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Alephant::Publisher::ViewMapper do
   let(:component_id) { :foo }
   let(:data) {{ :foo => :bar }}
-  let(:path) { File.join(File.dirname(__FILE__), 'fixtures/components') }
+  let(:path) { File.join(File.dirname(__FILE__), "fixtures/components") }
 
   subject { Alephant::Publisher::ViewMapper }
 
@@ -11,8 +11,8 @@ describe Alephant::Publisher::ViewMapper do
     context "view_base_path = invalid_path" do
       it "should raise an error" do
         expect {
-          subject.new(component_id, './invalid_path')
-        }.to raise_error
+          subject.new(component_id, "./invalid_path")
+        }.to raise_error(RuntimeError, "Invalid path: './invalid_path/foo'")
       end
     end
 
