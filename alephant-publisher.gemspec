@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'alephant/publisher/version'
+require "alephant/publisher/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "alephant-publisher"
@@ -27,22 +27,22 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-remote"
   spec.add_development_dependency "pry-nav"
 
-  spec.add_runtime_dependency 'sinatra'
-  spec.add_runtime_dependency 'faraday'
-  spec.add_runtime_dependency 'trollop'
-  spec.add_runtime_dependency 'rake'
-  spec.add_runtime_dependency 'aws-sdk-v1'
-  spec.add_runtime_dependency 'mustache', '>= 0.99.5'
-  spec.add_runtime_dependency 'jsonpath'
-  spec.add_runtime_dependency 'crimp'
-  spec.add_runtime_dependency 'peach'
-  spec.add_runtime_dependency 'i18n'
-  spec.add_runtime_dependency 'hashie'
-  spec.add_runtime_dependency 'alephant-support'
-  spec.add_runtime_dependency 'alephant-sequencer'
-  spec.add_runtime_dependency 'alephant-cache'
-  spec.add_runtime_dependency 'alephant-logger'
-  spec.add_runtime_dependency 'alephant-lookup'
+  spec.add_runtime_dependency "sinatra"
+  spec.add_runtime_dependency "faraday"
+  spec.add_runtime_dependency "trollop"
+  spec.add_runtime_dependency "rake"
+  spec.add_runtime_dependency "aws-sdk-v1"
+  spec.add_runtime_dependency "mustache", "0.99.8"
+  spec.add_runtime_dependency "jsonpath"
+  spec.add_runtime_dependency "crimp"
+  spec.add_runtime_dependency "peach"
+  spec.add_runtime_dependency "i18n"
+  spec.add_runtime_dependency "hashie"
+  spec.add_runtime_dependency "alephant-support"
+  spec.add_runtime_dependency "alephant-sequencer"
+  spec.add_runtime_dependency "alephant-cache"
+  spec.add_runtime_dependency "alephant-logger"
+  spec.add_runtime_dependency "alephant-lookup"
 
   spec.post_install_message = "WARNING: alephant-publisher has been deprecated in favour of alephant-publisher-queue."
 end
