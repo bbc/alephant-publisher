@@ -1,15 +1,15 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Alephant::Publisher::Writer do
   let(:opts) do
     {
-      :lookup_table_name    => 'lookup_table_name',
-      :msg_vary_id_path     => '$.vary',
+      :lookup_table_name    => "lookup_table_name",
+      :msg_vary_id_path     => "$.vary",
       :renderer_id          => :renderer_id,
       :s3_bucket_id         => :s3_bucket_id,
       :s3_object_path       => :s3_object_path,
-      :sequence_id_path     => '$.sequence',
-      :sequencer_table_name => :sequencer_table_name,
+      :sequence_id_path     => "$.sequence",
+      :sequencer_table_name => "sequencer_table_name",
       :view_path            => :view_path
     }
   end
@@ -44,7 +44,7 @@ describe Alephant::Publisher::Writer do
 
     allow_any_instance_of(Alephant::Publisher::ViewMapper).to receive(:generate)
       .and_return({
-        'component_id' => Struct.new(:render, :content_type).new('content', 'foo/bar')
+        "component_id" => Struct.new(:render, :content_type).new("content", "foo/bar")
       })
 
   end
@@ -55,11 +55,11 @@ describe Alephant::Publisher::Writer do
         "sequence" => "1",
         "vary" => "foo"
       }
-      Struct.new(:body,:id).new(data.to_json,'id')
+      Struct.new(:body,:id).new(data.to_json, "id")
     end
 
     let(:expected_location) do
-      'renderer_id/component_id/218c835cec343537589dbf1619532e4d/1'
+      "renderer_id/component_id/218c835cec343537589dbf1619532e4d/1"
     end
 
     subject do
@@ -72,7 +72,7 @@ describe Alephant::Publisher::Writer do
       allow_any_instance_of(Alephant::Lookup::LookupHelper).to receive(:write)
         .with(
           "component_id",
-          {:variant=>"foo"},
+          { :variant=> "foo" },
           1,
           expected_location
         )
@@ -82,7 +82,7 @@ describe Alephant::Publisher::Writer do
       allow_any_instance_of(Alephant::Lookup::LookupHelper).to receive(:write)
 
       allow_any_instance_of(Alephant::Cache).to receive(:put)
-        .with(expected_location, "content", "foo/bar", :msg_id=>"id")
+        .with(expected_location, "content", "foo/bar", :msg_id => "id")
     end
 
     after do

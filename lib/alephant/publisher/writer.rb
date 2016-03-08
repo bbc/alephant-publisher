@@ -1,12 +1,12 @@
-require 'peach'
-require 'crimp'
+require "peach"
+require "crimp"
 
-require 'alephant/cache'
-require 'alephant/lookup'
-require 'alephant/logger'
-require 'alephant/sequencer'
-require 'alephant/support/parser'
-require 'alephant/publisher/view_mapper'
+require "alephant/cache"
+require "alephant/lookup"
+require "alephant/logger"
+require "alephant/sequencer"
+require "alephant/support/parser"
+require "alephant/publisher/view_mapper"
 
 module Alephant
   module Publisher
@@ -41,7 +41,7 @@ module Alephant
       end
 
       def run!
-        batch? ? batch.sequence(message, &perform) : perform.call
+        batch? ? batch.validate(message, &perform) : perform.call
       end
 
       protected
@@ -51,7 +51,7 @@ module Alephant
       end
 
       def write(id, view)
-        seq_for(id).sequence(message) do
+        seq_for(id).validate(message) do
           store(id, view, location_for(id))
         end
       end
@@ -76,9 +76,11 @@ module Alephant
       def seq_for(id)
         Sequencer.create(
           config[:sequencer_table_name],
-          seq_key_from(id),
-          config[:sequence_id_path],
-          config[:keep_all_messages] == 'true'
+          {
+            :id => seq_key_from(id),
+            :jsonpath => config[:sequence_id_path],
+            :keep_all => config[:keep_all_messages] == "true"
+          }
         )
       end
 
@@ -107,7 +109,7 @@ module Alephant
       end
 
       def lookup
-        Lookup.create(config[:lookup_table_name])
+        Lookup.create(config[:lookup_table_name], config)
       end
     end
   end
